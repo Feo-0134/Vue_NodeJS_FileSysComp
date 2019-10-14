@@ -1,1 +1,1 @@
-'BiuBiuBiu' Vue + ElementUI + Express(Koa) + Node.js
+Vue + ElementUI + Express(Koa) + Node.js
