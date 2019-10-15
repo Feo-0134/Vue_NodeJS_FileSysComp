@@ -1,0 +1,30 @@
+{
+  "name": "Vue_NodeJS_FileSysComp",
+  "version": "1.0.0",
+  "description": "Vue + ElementUI + Express(Koa) + Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Feo-0134/Vue_NodeJS_FileSysComp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Feo-0134/Vue_NodeJS_FileSysComp/issues"
+  },
+  "homepage": "https://github.com/Feo-0134/Vue_NodeJS_FileSysComp#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "koa": "^2.10.0",
+    "koa-body": "^4.1.1",
+    "koa-logger": "^3.2.1",
+    "koa-route": "^3.2.0",
+    "koa-static": "^5.0.0",
+    "os": "^0.1.1",
+    "path": "^0.12.7"
+  }
+}
