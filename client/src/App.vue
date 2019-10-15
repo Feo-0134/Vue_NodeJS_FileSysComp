@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <UploadPage msg="Welcome to Your Vue.js App"/>
+    <UploadPage msg="Welcome, "/>
   </div>
 </template>
 
