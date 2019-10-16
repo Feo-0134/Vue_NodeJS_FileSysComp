@@ -3,7 +3,6 @@ const serve = require('koa-static');
 const koaBody = require('koa-body');
 const Router = require('koa-router');
 const cors = require('koa2-cors');
-const bodyParser = require('koa-bodyparser')
 const router = new Router({ prefix: '/api' })
 const Koa = require('koa');
 const fs = require('fs');
@@ -12,14 +11,9 @@ const os = require('os');
 const path = require('path');
 const URL = require('url');
 
-// log requests
-
-// app.use(logger());
-
-// app.use(koaBody({ multipart: true }));
 
 // serve files from ./public
-// app.use(serve(path.join(__dirname, '/public')));
+const servePublicFile = serve(path.join(__dirname, '/public'))
 
 
 // handle uploads
@@ -49,11 +43,13 @@ app.use(cors({
 }))
 
 app
-    .use(bodyParser())
-    .use(router.routes())
-    .use(router.allowedMethods())
+  .use(logger())
+  .use(koaBody({ multipart: true }))
+  .use(servePublicFile)
+  .use(router.routes())
+  .use(router.allowedMethods())
 
+  
 // listen
-
 app.listen(3000);
 console.log('listening on port 3000');
