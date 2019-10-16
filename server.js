@@ -9,6 +9,7 @@ const fs = require('fs');
 const app = new Koa();
 const os = require('os');
 const path = require('path');
+const extname = path.extname;
 const URL = require('url');
 
 
@@ -24,6 +25,30 @@ const upload = async function (ctx) {
   const stream = fs.createWriteStream(path.join(os.tmpdir(), 'uploadfile' + Math.random().toString()));
   reader.pipe(stream);
   console.log('uploading %s -> %s', file.name, stream.path);
+}
+
+function stat(file) {
+  return new Promise(function(resolve, reject) {
+    fs.stat(file, function(err, stat) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(stat);
+      }
+    });
+  });
+}
+
+const download = async function(ctx) {
+  console.log(ctx.path)
+  const fpath = path.join(__dirname, ctx.path);
+  const fstat = await stat(fpath);
+
+  if (fstat.isFile()) {
+    console.log('isFile')
+    ctx.type = extname(fpath);
+    ctx.body = fs.createReadStream(fpath);
+  }
 }
 
 router.post('/upload', upload)
@@ -46,10 +71,11 @@ app
   .use(logger())
   .use(koaBody({ multipart: true }))
   .use(servePublicFile)
+  .use(download)
   .use(router.routes())
   .use(router.allowedMethods())
 
-  
+
 // listen
 app.listen(3000);
 console.log('listening on port 3000');
