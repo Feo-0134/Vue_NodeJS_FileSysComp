@@ -1,14 +1,25 @@
 <template>
-  <div class="hello">
-    <el-button @click='uploadFile'>Biu</el-button>
-    <div @click="downloadFile">
-    <a href="javascript:;">Download</a>
-    </div>
-    <!-- <form action="/" method="post" enctype="multipart/form-data">
+<el-container class="hello">
+  <el-header class="appTitle">
+  <div class="titleBox Box1">
+    <img class="iconImg" alt="Vue logo" src="../assets/logo.png">
+  </div>
+  <div class="titleBox">
+    <p>{{ msg }}</p>
+  </div>
+  </el-header>
+  <el-main class = "mainContent">
+    <el-button class="titleBox" @click='uploadFile'>Upload</el-button>
+    <el-button class="titleBox" @click="downloadFile">
+    <el-link :underline="false" href="javascript:;">Download</el-link>
+      <!-- <form action="/" method="post" enctype="multipart/form-data">
       <input type="file" name="file" multiple>
       <input type="submit" value="Upload" @click=";">
-    </form> -->
-  </div>
+      </form> -->
+    </el-button>
+  </el-main>
+  <el-footer>a piece of blur code</el-footer>
+</el-container>
 </template>
 
 <script>
@@ -63,6 +74,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .mainContent {
+    min-height: 350px;
+    margin-top: 100px;
+  }
   h3 {
     margin: 40px 0 0;
   }
@@ -76,5 +91,21 @@
   }
   a {
     color: #42b983;
+  }
+  .appTitle {
+    text-align: left !important;
+  }
+  .iconImg {
+    height: 50px;
+    width: 50px !important;
+  }
+  .titleBox {
+    height: 50px;
+    display: inline-block;
+    width: 200px;
+    margin: 10px;
+  }
+  .Box1 {
+    width: 70px !important;
   }
 </style>

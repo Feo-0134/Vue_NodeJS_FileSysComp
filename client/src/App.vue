@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <UploadPage msg="Welcome, "/>
+    <UploadPage msg="A File I/O component powered by Koa."/>
   </div>
 </template>
 
