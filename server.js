@@ -22,9 +22,10 @@ const upload = async function (ctx) {
   console.log(ctx.request.body)
   const file = ctx.request.body.files.file;
   const reader = fs.createReadStream(file.path);
-  const stream = fs.createWriteStream(path.join(os.tmpdir(), 'uploadfile' + Math.random().toString()));
+  const stream = fs.createWriteStream(path.join(__dirname, './uploadfile' + file.name));
   reader.pipe(stream);
   console.log('uploading %s -> %s', file.name, stream.path);
+  ctx.response = stream.path;
 }
 
 function stat(file) {

@@ -12,11 +12,19 @@
     <el-button class="titleBox" @click='uploadFile'>Upload</el-button>
     <el-button class="titleBox" @click="downloadFile">
     <el-link :underline="false" href="javascript:;">Download</el-link>
-      <!-- <form action="/" method="post" enctype="multipart/form-data">
-      <input type="file" name="file" multiple>
-      <input type="submit" value="Upload" @click=";">
-      </form> -->
     </el-button>
+    <el-upload
+      class="upload-demo"
+      drag
+      action="https://jsonplaceholder.typicode.com/posts/"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      :file-list="fileList"
+      multiple>
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+      <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
+    </el-upload>
   </el-main>
   <el-footer>a piece of blur code</el-footer>
 </el-container>
