@@ -11,6 +11,8 @@ const os = require('os');
 const path = require('path');
 const extname = path.extname;
 const URL = require('url');
+var multer = require("multer");
+var upload = multer({dest:'./upload'});
 
 
 // serve files from ./public
@@ -18,14 +20,18 @@ const servePublicFile = serve(path.join(__dirname, '/public'))
 
 
 // handle uploads
-const upload = async function (ctx) {
-  console.log(ctx.request.body)
-  const file = ctx.request.body.files.file;
-  const reader = fs.createReadStream(file.path);
-  const stream = fs.createWriteStream(path.join(__dirname, './uploadfile' + file.name));
-  reader.pipe(stream);
-  console.log('uploading %s -> %s', file.name, stream.path);
-  ctx.response = stream.path;
+const uploadFile = async function (ctx) {
+  try{
+    let file = ctx.request.body.file;	// 获取上传文件
+    const reader = fs.createReadStream(file.path);	// 创建可读流
+    const upStream = fs.createWriteStream(`upload/${file.name}`);		// 创建可写流
+    reader.pipe(upStream);	// 可读流通过管道写入可写流
+  }catch(e){
+    console.log(e)
+    if(e.toString().match("'path' of undefined"))
+    console.log('666')
+  }
+	return ctx.body = '上传成功';
 }
 
 function stat(file) {
@@ -52,7 +58,7 @@ const download = async function(ctx) {
   }
 }
 
-router.post('/upload', upload)
+router.post('/upload', uploadFile)
 
 app.use(cors({
   origin: function (ctx) {
@@ -70,11 +76,20 @@ app.use(cors({
 
 app
   .use(logger())
-  .use(koaBody({ multipart: true }))
+  .use(koaBody({ multipart: true,
+    formidable: {
+      maxFileSize: 200*1024*1024,	// 设置上传文件大小最大限制，默认2M
+      uploadDir: 'upload/',
+      onFileBegin: (name, file)=>{	// 文件存储之前对文件进行重命名处理
+          file.path = `upload/${file.name}`;
+      }
+    } 
+  }))
   .use(servePublicFile)
-  .use(download)
-  .use(router.routes())
   .use(router.allowedMethods())
+  .use(router.routes())
+  .use(download)
+
 
 
 // listen

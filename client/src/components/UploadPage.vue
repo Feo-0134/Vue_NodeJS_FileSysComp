@@ -9,21 +9,23 @@
   </div>
   </el-header>
   <el-main class = "mainContent">
-    <el-button class="titleBox" @click='uploadFile'>Upload</el-button>
+    <!-- <el-button class="titleBox" @click=';'>Upload</el-button> -->
     <el-button class="titleBox" @click="downloadFile">
     <el-link :underline="false" href="javascript:;">Download</el-link>
     </el-button>
+    <!-- <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update"/> -->
     <el-upload
       class="upload-demo"
-      drag
-      action="https://jsonplaceholder.typicode.com/posts/"
+      action="http://127.0.0.1:3000/api/upload"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
-      :file-list="fileList"
-      multiple>
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
-      <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
+      :before-remove="beforeRemove"
+      multiple
+      :limit="3"
+      :on-exceed="handleExceed"
+      :file-list="fileList">
+      <el-button class="titleBox">Upload</el-button>
+      <div slot="tip" class="el-upload__tip">jpg/png files with a size less than 500kb</div>
     </el-upload>
   </el-main>
   <el-footer>a piece of blur code</el-footer>
@@ -34,7 +36,15 @@
   export default {
     name: 'UploadPage',
     props: {
-      msg: String
+      msg: String,
+      file:"",
+      message:"",
+      fileList: []
+    },
+    data(){
+      return {
+        currentDate: new Date()
+      }
     },
     methods: {
       // templateFunc() {
@@ -49,16 +59,36 @@
       downloadFile() {
         window.location.href = this.downloadApiPath
       },
-
-      uploadFile() {
-          // this.$http.get(this.apiPath)
-          this.$http.post(this.uploadApiPath, this.uploadApiPayload)
+      update(e){
+        let file = e.target.files[0];
+        let param = new FormData(); 
+        param.append('file',file);
+        console.log(param.get('file'));
+        let config = {
+          headers:{'Content-Type':'multipart/form-data'}
+        }; //添加请求头
+        this.$http.post('http://127.0.0.1:3000/api/upload',param,config)
+          .then(response=>{
+            console.log(response.data);
+          })
       },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`The limit is 3, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      }
     },
     computed:{
       downloadApiPath() {
         return (
-          'http://127.0.0.1:3000/public/temp.zip'
+          'http://127.0.0.1:3000/public/template.xlsx'
         );
       },
       uploadApiPath() {
@@ -70,7 +100,7 @@
         return {
           files:{
             file:{
-              path:'C:/Users/t-junzhu/workspace/helloWorld.txt',
+              path:this.$refs.file.files[0].path,
               name:'helloWorld.txt'
             }
           }
@@ -82,6 +112,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .marginTop60 {
+    margin-top: 60px;
+  }
   .mainContent {
     min-height: 350px;
     margin-top: 100px;
@@ -115,5 +148,34 @@
   }
   .Box1 {
     width: 70px !important;
+  }
+    .time {
+    font-size: 13px;
+    color: #999;
+  }
+  
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .button {
+    padding: 0;
+    float: right;
+  }
+
+  .image {
+    width: 100%;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  
+  .clearfix:after {
+      clear: both
   }
 </style>
